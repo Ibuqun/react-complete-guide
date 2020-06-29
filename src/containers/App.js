@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classes from './App.css';
-import Person from './Person/Person';
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
+//import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 //import styled from 'styled-components';
 // import Radium, {StyleRoot} from 'radium';
 // import UserInput from './UserInput/UserInput';
@@ -23,15 +25,37 @@ import Person from './Person/Person';
 // `;
 
 class App extends Component {
+  constructor (props) {
+    super(props);
+    console.log('[App.js] constructor');
+  }
   state  = {
       persons: [
       { id: 'aaa122', name: 'Dapson', age: 18},
       { id: 'dscdsd13', name: 'Kayston', age: 22},
       { id: 'gfgfh6645', name: 'Jide', age: 23}
     ],
-    showPersons: false
-    };
+    showPersons: false,
+    showCockpit: true
+    }
 
+    static getDerivedStateFromProps(props, state) {
+      console.log('[App.js] getDerivedStateFromProps', props);
+      return state;
+    } 
+
+    componentDidMount() {
+      console.log('[App.js] componentDidMount');
+    }
+
+    shouldComponentUpdate() {
+      console.log('[App.js] shouldComponentUpdate');
+      return true;
+    }
+
+    componentDidUpdate() {
+      console.log('[App.js] componentDidUpdate');
+    }
     /*switchNameHandler = (newName) => {
       //console.log('was clicked!');
       // DO NOT DO THIS --> this.state.persons[0].name = 'Ibukunoluwa';
@@ -73,7 +97,7 @@ class App extends Component {
     }
 
     render () {
-
+      console.log('[App.js] render');
       // const style = {
       //   backgroundColor: 'green',
       //   color: 'white',
@@ -88,21 +112,14 @@ class App extends Component {
       // } 
 
       let persons = null;
-      let btnClasses = '';
 
       if (this.state.showPersons) {
-        persons = (
-            <div>
-              {this.state.persons.map ((person, index) => {
-                return <Person
-                click={() => this.deletePersonHandler(index)}
-                name={person.name}
-                age={person.age}
-                key={person.id}
-                changed={(event) => this.nameChangeHandler(event, person.id)}
-                />
-              })}
-              {/* <Person 
+        persons = <Persons 
+              persons={this.state.persons}
+              clicked={this.deletePersonHandler}
+              changed={this.nameChangeHandler}
+              />
+              /* <Person 
                 name={this.state.persons[0].name} 
                 age={this.state.persons[0].age}/>
               <Person 
@@ -113,37 +130,30 @@ class App extends Component {
                 My hobbies: Racing, Kayaking</Person>
               <Person 
                 name={this.state.persons[2].name} 
-                age={this.state.persons[2].age}/> */}
-            </div>
-        );
+                age={this.state.persons[2].age}/> */
+        
+        ;
         // style.backgroundColor = 'red';
         // style[':hover'] = {
         //   backgroundColor: 'salmon',
         //   color: 'white'
         //}; 
-        btnClasses = classes.Red
-      }
-
-      const assignedClasses = [];
-      if (this.state.persons.length <= 2) {
-        assignedClasses.push(classes.red); //classes = ['red']
-      }
-      if (this.state.persons.length <= 1) {
-        assignedClasses.push(classes.bold); //classes = ['red', 'bold']
       }
 
       return (
-        
           <div className={classes.App}>
-            <h1>Hi, I'm a react app</h1>
-            <p className={assignedClasses.join(' ')}>This is really working</p>
-            <button
-              className={btnClasses}
-              onClick= {this.togglePersonsHandler}>
-                Toggle Person
-            </button>
+          <button onClick={() => {
+            this.setState({showCockpit: false});
+          }}>Remove Cockpit</button>
+           {this.state.showCockpit ? <Cockpit 
+            title={this.props.appTitle}
+            showPersons={this.state.showPersons}
+            personsLength={this.state.persons.length}
+            clicked={this.togglePersonsHandler}/>
+            : null}
               {persons}
-          </div>
+          </div> 
+          
         
       );
   }
