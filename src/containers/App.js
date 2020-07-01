@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classes from './App.css';
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
+import WithClass from '../hoc/WithClass';
 //import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 //import styled from 'styled-components';
 // import Radium, {StyleRoot} from 'radium';
@@ -141,7 +142,7 @@ class App extends Component {
       }
 
       return (
-          <div className={classes.App}>
+          <WithClass classes={classes.App}>
           <button onClick={() => {
             this.setState({showCockpit: false});
           }}>Remove Cockpit</button>
@@ -152,7 +153,7 @@ class App extends Component {
             clicked={this.togglePersonsHandler}/>
             : null}
               {persons}
-          </div> 
+          </WithClass> 
           
         
       );
