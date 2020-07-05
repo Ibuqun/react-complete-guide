@@ -4,6 +4,7 @@ import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
 import withClass from '../hoc/withClass';
 import Aux from '../hoc/Auxiliary';
+import AuthContext from '../context/auth-context';
 //import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 //import styled from 'styled-components';
 // import Radium, {StyleRoot} from 'radium';
@@ -39,7 +40,8 @@ class App extends Component {
     ],
     showPersons: false,
     showCockpit: true,
-    changeCounter: 0
+    changeCounter: 0,
+    authenticated: false,
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -105,6 +107,8 @@ class App extends Component {
       this.setState({showPersons: !doesShow});
     }
 
+    loginHandler = () => {this.setState({authenticated: true})};
+
     render () {
       console.log('[App.js] render');
       // const style = {
@@ -127,6 +131,7 @@ class App extends Component {
               persons={this.state.persons}
               clicked={this.deletePersonHandler}
               changed={this.nameChangeHandler}
+              isAuthenticated={this.state.authenticated}
               />
               /* <Person 
                 name={this.state.persons[0].name} 
@@ -154,13 +159,17 @@ class App extends Component {
           <button onClick={() => {
             this.setState({showCockpit: false});
           }}>Remove Cockpit</button>
-           {this.state.showCockpit ? <Cockpit 
+          <AuthContext.Provider>
+           {this.state.showCockpit ? 
+           <Cockpit 
             title={this.props.appTitle}
             showPersons={this.state.showPersons}
             personsLength={this.state.persons.length}
-            clicked={this.togglePersonsHandler}/>
+            clicked={this.togglePersonsHandler}
+            login={this.loginHandler}/>
             : null}
               {persons}
+            </AuthContext.Provider>
           </Aux> 
           
         
